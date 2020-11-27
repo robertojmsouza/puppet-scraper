@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
     await page.select("#cmb_estado", "MG");
     console.log("Selected Estado");
     await page.waitFor(3000);
-    await page.select("#cmb_cidade", "4105");
+    await page.select("#cmb_cidade", "2803");//4105 4104 2803
     console.log("Selected Cidade");
     await page.waitFor(3000);
     await page.waitFor('#btn_next0');
@@ -22,13 +22,29 @@ const puppeteer = require('puppeteer');
     const paginacao = await page.$$("#paginacao > a");
     await page.waitFor(2000);
 
+    /*
+    const result = await page.evaluate(() => {
+        let data = []; 
+        let elements = document.querySelectorAll('.product_pod');
+      
+        for (var element of elements){
+            let title = element.childNodes[5].innerText;
+            let price = element.childNodes[7].children[0].innerText;
+      
+            data.push({title, price});
+        }
+      
+        return data;
+    });
+    */
+
     for (let i = 1; i <= paginacao.length; i++) {
 
         if (i > 1) {
             console.log("START");
             await page.$eval("#paginacao > a:nth-child("+i+")", elem => elem.click());
             console.log("END");
-            await page.waitFor(3000);
+            await page.waitFor(3500);
         }
 
         console.log("Pagina: " + i);
@@ -41,12 +57,10 @@ const puppeteer = require('puppeteer');
         }
     }
 
-    /*
     await page.screenshot({
       path: "screenshot.png",
       fullPage: true
     });
-    */
-
+    
     await browser.close();
 })();
